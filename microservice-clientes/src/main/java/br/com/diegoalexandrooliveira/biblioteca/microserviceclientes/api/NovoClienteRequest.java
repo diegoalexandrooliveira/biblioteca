@@ -1,5 +1,6 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.comum.UnicoValor;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Endereco;
 import lombok.AccessLevel;
@@ -15,6 +16,7 @@ import javax.validation.constraints.NotNull;
 class NovoClienteRequest {
 
     @NotBlank
+    @UnicoValor(campoUnico = "usuario", entidade = "Cliente")
     private String usuario;
 
     @NotBlank
