@@ -43,11 +43,11 @@
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
 	&quot;usuario&quot;:&quot;${__RandomString(10)}&quot;,&#xd;
-	&quot;nomeCompleto&quot;:&quot;Diego Alexandro de Oliveira&quot;,&#xd;
-	&quot;cpf&quot;:&quot;40859627870&quot;,&#xd;
-	&quot;logradouro&quot;:&quot;R Osmar Luchini&quot;,&#xd;
-	&quot;numero&quot;: 55,&#xd;
-	&quot;cidade&quot;:&quot;Assis&quot;,&#xd;
+	&quot;nomeCompleto&quot;:&quot;Novo usuário&quot;,&#xd;
+	&quot;cpf&quot;:&quot;26834274090&quot;,&#xd;
+	&quot;logradouro&quot;:&quot;Rua Um&quot;,&#xd;
+	&quot;numero&quot;: 1,&#xd;
+	&quot;cidade&quot;:&quot;São Paulo&quot;,&#xd;
 	&quot;estado&quot;:&quot;São Paulo&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
