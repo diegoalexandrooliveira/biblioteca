@@ -25,6 +25,8 @@ class ClienteResponse {
 
     private String estado;
 
+    private boolean habilitado;
+
 
     public static ClienteResponse of(Cliente cliente) {
         ClienteResponse clienteResponse = new ClienteResponse();
@@ -36,6 +38,7 @@ class ClienteResponse {
         clienteResponse.numero = cliente.getNumero();
         clienteResponse.cidade = cliente.getCidade();
         clienteResponse.estado = cliente.getEstado();
+        clienteResponse.habilitado = cliente.isHabilitado();
         return clienteResponse;
     }
 }

@@ -26,6 +26,9 @@ public class Cliente {
     @Getter
     private String cpf;
 
+    @Getter
+    private boolean habilitado;
+
     @Embedded
     private Endereco endereco;
 
@@ -34,6 +37,7 @@ public class Cliente {
         this.nomeCompleto = nomeCompleto;
         this.cpf = cpf;
         this.endereco = endereco;
+        this.habilitado = true;
     }
 
     public String getLogradouro() {
@@ -50,6 +54,10 @@ public class Cliente {
 
     public String getEstado() {
         return endereco.getEstado();
+    }
+
+    public void inativar() {
+        this.habilitado = false;
     }
 
 }

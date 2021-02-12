@@ -5,12 +5,11 @@ import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Cli
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
@@ -23,6 +22,23 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<ClienteResponse> salvar(@RequestBody @Valid NovoClienteRequest novoClienteRequest) {
         Cliente cliente = clienteRepository.save(novoClienteRequest.converter());
+        return ResponseEntity.ok(ClienteResponse.of(cliente));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ClienteResponse>> recuperarTodos() {
+        return ResponseEntity.ok(
+                clienteRepository.findAll()
+                        .stream()
+                        .map(ClienteResponse::of)
+                        .collect(Collectors.toList()));
+    }
+
+    @PutMapping(value = "/inativa/{id}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<ClienteResponse> inativar(@PathVariable("id") Long id) {
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(String.format("Id %s não encontrado", id)));
+        cliente.inativar();
+        clienteRepository.save(cliente);
         return ResponseEntity.ok(ClienteResponse.of(cliente));
     }
 

@@ -28,6 +28,7 @@ class ClienteTest {
         assertEquals(1, cliente.getNumero());
         assertEquals("Cidade", cliente.getCidade());
         assertEquals("Estado", cliente.getEstado());
+        assertTrue(cliente.isHabilitado());
     }
 
     @DisplayName("Não deve criar um cliente com endereço nulo")

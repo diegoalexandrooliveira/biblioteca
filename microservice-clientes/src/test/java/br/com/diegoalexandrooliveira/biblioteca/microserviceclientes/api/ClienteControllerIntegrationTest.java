@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import javax.transaction.Transactional;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -62,6 +62,7 @@ class ClienteControllerIntegrationTest {
         assertEquals("São Paulo", cliente.getCidade());
         assertEquals("São Paulo", cliente.getEstado());
         assertEquals(2, cliente.getNumero());
+        assertTrue(cliente.isHabilitado());
     }
 
     @Test
@@ -131,5 +132,52 @@ class ClienteControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+    }
+
+
+    @Test
+    @DisplayName("Deve inativar um usuário")
+    void teste5() throws Exception {
+
+        String json = "{" +
+                "\"usuario\":\"novo_usuario@gmail.com\"," +
+                "\"nomeCompleto\":\"Novo Usuario\"," +
+                "\"cpf\":\"25009169010\"," +
+                "\"logradouro\":\"Rua Um\"," +
+                "\"numero\": 2," +
+                "\"cidade\":\"São Paulo\"," +
+                "\"estado\":\"São Paulo\"" +
+                "}";
+
+        String jsonRetornoPost = mockMvc.perform(MockMvcRequestBuilders
+                .post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Map<?, ?> jsonMap = new ObjectMapper().readValue(jsonRetornoPost, Map.class);
+
+        String jsonRespostaInativar = mockMvc.perform(MockMvcRequestBuilders
+                .put("/clientes/inativa/" + jsonMap.get("id"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Map<?, ?> jsonRetornoInativar = new ObjectMapper().readValue(jsonRespostaInativar, Map.class);
+
+        assertEquals("novo_usuario@gmail.com", jsonRetornoInativar.get("usuario"));
+        assertEquals("Novo Usuario", jsonRetornoInativar.get("nomeCompleto"));
+        assertEquals("25009169010", jsonRetornoInativar.get("cpf"));
+        assertEquals("Rua Um", jsonRetornoInativar.get("logradouro"));
+        assertEquals("São Paulo", jsonRetornoInativar.get("cidade"));
+        assertEquals("São Paulo", jsonRetornoInativar.get("estado"));
+        assertEquals(2, jsonRetornoInativar.get("numero"));
+        assertFalse(Boolean.getBoolean(jsonRetornoInativar.get("habilitado").toString()));
     }
 }
