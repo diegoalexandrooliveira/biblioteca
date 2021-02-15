@@ -11,3 +11,9 @@ spring:
 server:
   servlet:
     context-path: '/api/clientes-ms/'
+keycloak:
+  realm: 'biblioteca'
+  resource: 'clientes'
+  auth-server-url: http://localhost:8000/auth
+  bearer-only: true
+  use-resource-role-mappings: true
