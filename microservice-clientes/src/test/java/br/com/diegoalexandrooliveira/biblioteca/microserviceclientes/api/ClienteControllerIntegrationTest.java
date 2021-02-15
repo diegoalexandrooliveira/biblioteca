@@ -1,5 +1,6 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.config.security.Papeis;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -137,6 +139,7 @@ class ClienteControllerIntegrationTest {
 
     @Test
     @DisplayName("Deve inativar um usuário")
+    @WithMockUser(roles = {Papeis.ADMIN})
     void teste5() throws Exception {
 
         String json = "{" +
@@ -179,5 +182,38 @@ class ClienteControllerIntegrationTest {
         assertEquals("São Paulo", jsonRetornoInativar.get("estado"));
         assertEquals(2, jsonRetornoInativar.get("numero"));
         assertFalse(Boolean.getBoolean(jsonRetornoInativar.get("habilitado").toString()));
+    }
+
+    @Test
+    @DisplayName("Usuário sem papel de ADMIN não pode inativar outro usuário")
+    @WithMockUser(roles = {Papeis.USUARIO}, username = "novo_usuario@gmail.com")
+    void teste6() throws Exception {
+
+        String json = "{" +
+                "\"usuario\":\"usuario_antigo@gmail.com\"," +
+                "\"nomeCompleto\":\"Usuario Antigo\"," +
+                "\"cpf\":\"25009169010\"," +
+                "\"logradouro\":\"Rua Um\"," +
+                "\"numero\": 2," +
+                "\"cidade\":\"São Paulo\"," +
+                "\"estado\":\"São Paulo\"" +
+                "}";
+
+        String jsonRetornoPost = mockMvc.perform(MockMvcRequestBuilders
+                .post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        Map<?, ?> jsonMap = new ObjectMapper().readValue(jsonRetornoPost, Map.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/clientes/inativa/" + jsonMap.get("id"))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 }

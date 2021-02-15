@@ -10,13 +10,11 @@ import javax.sql.DataSource;
 @Configuration
 class PostgreSQLContainerUtil {
 
-
     private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13-alpine");
 
     static {
         postgreSQLContainer.start();
     }
-
 
     @Bean
     DataSource dataSource() {
@@ -27,6 +25,4 @@ class PostgreSQLContainerUtil {
                 .url(postgreSQLContainer.getJdbcUrl())
                 .build();
     }
-
-
 }

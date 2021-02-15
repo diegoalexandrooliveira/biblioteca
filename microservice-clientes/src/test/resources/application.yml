@@ -5,3 +5,4 @@ spring:
       ddl-auto: none
 keycloak:
   enabled: false
+  resource: test
