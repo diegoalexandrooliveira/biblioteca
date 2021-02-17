@@ -16,14 +16,14 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">2</stringProp>
+          <stringProp name="LoopController.loops">1</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">10000</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">2</stringProp>
+        <stringProp name="ThreadGroup.num_threads">5000</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
-        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">false</boolProp>
       </ThreadGroup>
       <hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -31,6 +31,10 @@
             <elementProp name="" elementType="Header">
               <stringProp name="Header.name">Content-Type</stringProp>
               <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvV2lKUkpmX0xhcEk2ZDNlWkJXVmVrdy1JcG5fSGJwbWt4TUgxbFVOTVhJIn0.eyJleHAiOjE2MTM1NTcyODksImlhdCI6MTYxMzUyMTI4OSwianRpIjoiNzQ5MTE4M2YtZjM2My00MDI1LWEyMmEtZjUyZGM1YTJkNjEzIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL2F1dGgvcmVhbG1zL2JpYmxpb3RlY2EiLCJhdWQiOlsibGl2cm9zIiwiYWNjb3VudCJdLCJzdWIiOiI1NzM5NmQzOS1lY2JkLTRjYmItOTIyMS0zNTc5MzczYjBhMTkiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJjbGllbnRlcyIsInNlc3Npb25fc3RhdGUiOiJiNDVmYWE1Yy0wZDVkLTRlOGMtYjExNy1iZGYxZTAyZWZiYmIiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJsaXZyb3MiOnsicm9sZXMiOlsiYWRtaW5pc3RyYWRvciJdfSwiY2xpZW50ZXMiOnsicm9sZXMiOlsiYWRtaW5pc3RyYWRvciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbiJ9.AHjJJfBS2lNUmd94h5GTkQH5B9TvVENjniknCyPXSyb2phaS707UV41N0S3ssYgCqjqUXbcjK6s2-QeX9oc-OK0oF18uN1hXK7f9IrjS4OynoKZdcFX6A0HCa4_K4E1bpAQE9LwzvmapjCM-w1QlXnr78wHizhaBcE5UTW8Pf1KClfpGeYRn2SLymq5meYkCfkIbwPZHZFxvEaxf3-IjaD3iIWsEowTU2C22E8eA4oK9gWH3n2aNXIOT27fRINEdoouLbA3IYag_avoozjdeb6F9tIsE6oNOUbLObCNWHtcMA7BpExKHvWK84H_WcQ1-hf8EnjuvBtzEJ3MbdwxZWg</stringProp>
             </elementProp>
           </collectionProp>
         </HeaderManager>
@@ -55,11 +59,58 @@
             </collectionProp>
           </elementProp>
           <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
+          <stringProp name="HTTPSampler.port">8001</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
-          <stringProp name="HTTPSampler.path">/api/clientes-ms/clientes</stringProp>
+          <stringProp name="HTTPSampler.path">/api/service/clientes</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group" enabled="true">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">200</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">0</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration"></stringProp>
+        <stringProp name="ThreadGroup.delay"></stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Authorization</stringProp>
+              <stringProp name="Header.value">Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJvV2lKUkpmX0xhcEk2ZDNlWkJXVmVrdy1JcG5fSGJwbWt4TUgxbFVOTVhJIn0.eyJleHAiOjE2MTM1NTcyODksImlhdCI6MTYxMzUyMTI4OSwianRpIjoiNzQ5MTE4M2YtZjM2My00MDI1LWEyMmEtZjUyZGM1YTJkNjEzIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL2F1dGgvcmVhbG1zL2JpYmxpb3RlY2EiLCJhdWQiOlsibGl2cm9zIiwiYWNjb3VudCJdLCJzdWIiOiI1NzM5NmQzOS1lY2JkLTRjYmItOTIyMS0zNTc5MzczYjBhMTkiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJjbGllbnRlcyIsInNlc3Npb25fc3RhdGUiOiJiNDVmYWE1Yy0wZDVkLTRlOGMtYjExNy1iZGYxZTAyZWZiYmIiLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJsaXZyb3MiOnsicm9sZXMiOlsiYWRtaW5pc3RyYWRvciJdfSwiY2xpZW50ZXMiOnsicm9sZXMiOlsiYWRtaW5pc3RyYWRvciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbiJ9.AHjJJfBS2lNUmd94h5GTkQH5B9TvVENjniknCyPXSyb2phaS707UV41N0S3ssYgCqjqUXbcjK6s2-QeX9oc-OK0oF18uN1hXK7f9IrjS4OynoKZdcFX6A0HCa4_K4E1bpAQE9LwzvmapjCM-w1QlXnr78wHizhaBcE5UTW8Pf1KClfpGeYRn2SLymq5meYkCfkIbwPZHZFxvEaxf3-IjaD3iIWsEowTU2C22E8eA4oK9gWH3n2aNXIOT27fRINEdoouLbA3IYag_avoozjdeb6F9tIsE6oNOUbLObCNWHtcMA7BpExKHvWK84H_WcQ1-hf8EnjuvBtzEJ3MbdwxZWg</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP Request" enabled="true">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.port">8001</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding">UTF-8</stringProp>
+          <stringProp name="HTTPSampler.path">/api/service/clientes</stringProp>
+          <stringProp name="HTTPSampler.method">GET</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
@@ -179,7 +230,7 @@
           </value>
         </objProp>
         <stringProp name="filename"></stringProp>
-        <stringProp name="RespTimeGraph.interval">10</stringProp>
+        <stringProp name="RespTimeGraph.interval">1000</stringProp>
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report" enabled="true">
