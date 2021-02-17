@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/biblioteca-emprestimos
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+server:
+  port: 8003
+  servlet:
+    context-path: '/api/service/'
+keycloak:
+  realm: 'biblioteca'
+  resource: 'emprestimos'
+  auth-server-url: http://localhost:8000/auth
+  bearer-only: true
+  use-resource-role-mappings: true

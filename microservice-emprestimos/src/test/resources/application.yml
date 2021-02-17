@@ -6,6 +6,3 @@ spring:
 keycloak:
   enabled: false
   resource: test
-kafka:
-  producer:
-    topic: test

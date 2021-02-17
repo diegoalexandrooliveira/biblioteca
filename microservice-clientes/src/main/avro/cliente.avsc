@@ -1,0 +1,39 @@
+{
+  "namespace": "br.com.diegoalexandrooliveira.biblioteca",
+  "type": "record",
+  "name": "ClienteRecord",
+  "fields": [
+    {
+      "name": "usuario",
+      "type": "string"
+    },
+    {
+      "name": "nomeCompleto",
+      "type": "string"
+    },
+    {
+      "name": "cpf",
+      "type": "string"
+    },
+    {
+      "name": "logradouro",
+      "type": "string"
+    },
+    {
+      "name": "numero",
+      "type": "int"
+    },
+    {
+      "name": "cidade",
+      "type": "string"
+    },
+    {
+      "name": "estado",
+      "type": "string"
+    },
+    {
+      "name": "habilitado",
+      "type": "boolean"
+    }
+  ]
+}

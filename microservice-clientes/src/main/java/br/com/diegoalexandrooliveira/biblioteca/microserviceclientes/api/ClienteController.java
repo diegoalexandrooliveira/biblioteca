@@ -26,11 +26,13 @@ public class ClienteController {
 
     private final ClienteRepository clienteRepository;
     private final KeycloakInfoExtractor keycloakInfoExtractor;
+    private final EnviarCliente enviarCliente;
 
     @PostMapping
     @RolesAllowed(ADMIN)
     public ResponseEntity<ClienteResponse> salvar(@RequestBody @Valid NovoClienteRequest novoClienteRequest) {
         Cliente cliente = clienteRepository.save(novoClienteRequest.converter());
+        enviarCliente.enviar(cliente);
         return ResponseEntity.ok(ClienteResponse.of(cliente));
     }
 
@@ -63,6 +65,7 @@ public class ClienteController {
         }
         cliente.inativar();
         clienteRepository.save(cliente);
+        enviarCliente.enviar(cliente);
         return ResponseEntity.ok(ClienteResponse.of(cliente));
     }
 
