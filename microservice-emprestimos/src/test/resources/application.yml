@@ -1,8 +1,7 @@
-spring:
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
 keycloak:
   enabled: false
   resource: test
+kafka:
+  consumer:
+    topic-clientes-group-id: 1
+    topic-clientes: novos-clientes

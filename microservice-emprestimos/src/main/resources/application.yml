@@ -1,13 +1,15 @@
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: postgres
-    url: jdbc:postgresql://localhost:5432/biblioteca-emprestimos
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: none
+  data:
+    mongodb:
+      database: emprestimos
+      username: root
+      password: root
+      authentication-database: admin
+  kafka:
+    properties:
+      schema.registry.url: http://localhost:8040
+    consumer:
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 server:
   port: 8003
   servlet:
@@ -18,3 +20,9 @@ keycloak:
   auth-server-url: http://localhost:8000/auth
   bearer-only: true
   use-resource-role-mappings: true
+kafka:
+  consumer:
+    topic-clientes: novos-clientes
+    topic-clientes-group-id: 1
+    topic-livros: novos-livros
+    topic-livros-group-id: 1
