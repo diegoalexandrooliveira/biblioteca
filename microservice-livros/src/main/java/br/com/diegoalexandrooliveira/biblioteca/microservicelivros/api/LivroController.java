@@ -31,6 +31,7 @@ public class LivroController {
     private final LivroRepository livroRepository;
     private final HistoricoCopiasRepository historicoCopiasRepository;
     private final KeycloakInfoExtractor keycloakInfoExtractor;
+    private final EnviarNovoLivro enviarNovoLivro;
 
 
     @PostMapping
@@ -38,6 +39,7 @@ public class LivroController {
     public ResponseEntity<LivroResponse> salvar(@RequestBody @Valid NovoLivroRequest novoLivroRequest) {
         Livro livro = novoLivroRequest.converte();
         livroRepository.save(livro);
+        enviarNovoLivro.enviar(livro);
         return ResponseEntity.ok(LivroResponse.of(livro));
     }
 

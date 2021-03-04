@@ -8,6 +8,11 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+  kafka:
+    properties:
+      schema.registry.url: http://localhost:8040
+    producer:
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 server:
   port: 8002
   servlet:
@@ -18,3 +23,8 @@ keycloak:
   auth-server-url: http://localhost:8000/auth
   bearer-only: true
   use-resource-role-mappings: true
+kafka:
+  livros-topics:
+    novos: livros-novos
+    adiciona-copia: livros-adiciona-copia
+    remove-copia: livros-remove-copia

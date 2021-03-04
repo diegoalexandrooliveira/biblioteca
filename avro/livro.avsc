@@ -1,0 +1,31 @@
+{
+  "namespace": "br.com.diegoalexandrooliveira.biblioteca",
+  "type": "record",
+  "name": "LivroRecord",
+  "fields": [
+    {
+      "name": "titulo",
+      "type": "string"
+    },
+    {
+      "name": "isbn",
+      "type": "string"
+    },
+    {
+      "name": "editora",
+      "type": "string"
+    },
+    {
+      "name": "nomeAutor",
+      "type": "string"
+    },
+    {
+      "name": "numeroPaginas",
+      "type": "int"
+    },
+    {
+      "name": "anoLancamento",
+      "type": "int"
+    }
+  ]
+}

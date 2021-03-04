@@ -22,7 +22,16 @@ keycloak:
   use-resource-role-mappings: true
 kafka:
   consumer:
-    topic-clientes: novos-clientes
-    topic-clientes-group-id: 1
-    topic-livros: novos-livros
-    topic-livros-group-id: 1
+    clientes:
+      topic: novos-clientes
+      group-id: 1
+    livros:
+      novos:
+        topic: livros-novos
+        group-id: 1
+      adiciona-copia:
+        topic: livros-adiciona-copia
+        group-id: 1
+      remove-copia:
+        topic: livros-remove-copia
+        group-id: 1
