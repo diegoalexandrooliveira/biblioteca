@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "c94d7639-a4a5-44e9-9478-c35f616a5431",
+		"name": "Biblioteca",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Clientes",
+			"item": [
+				{
+					"name": "Novo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usuario\": \"diego3\",\n    \"nomeCompleto\": \"Diego Alexandro de Oliveira\",\n    \"cpf\": \"90971244090\",\n    \"logradouro\": \"Rua 1\",\n    \"numero\": \"10\",\n    \"cidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/api/service/clientes",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"api",
+								"service",
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Livros",
+			"item": [
+				{
+					"name": "Novo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"titulo\": \"Migrando sistemas monolíticos para microsserviços\",\n    \"isbn\": \"9786586057041\",\n    \"numeroPaginas\": \"287\",\n    \"anoLancamento\": \"2020\",\n    \"editora\": \"Novatec\",\n    \"nomeAutor\": \"Sam Newman\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8002/api/service/livros",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"api",
+								"service",
+								"livros"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "accessToken",
+				"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJPd0dKTlRfME43WVRfdXR3MkpOY3MxVl9pcjBaUWtXZWNTYzB0STE2alVvIn0.eyJleHAiOjE2MTUzNzAzMTksImlhdCI6MTYxNTMzNDMxOSwianRpIjoiOTViM2FiMWEtNDc5ZC00YmQ1LWI0MzQtOGU4ZDlhMjc5NjJjIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDAwL2F1dGgvcmVhbG1zL2JpYmxpb3RlY2EiLCJhdWQiOlsibGl2cm9zIiwiZW1wcmVzdGltb3MiLCJhY2NvdW50Il0sInN1YiI6IjcxNTNmMzEyLTZhNTctNDk0NS1iY2NiLTc2NWZhM2I5N2E0MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImNsaWVudGVzIiwic2Vzc2lvbl9zdGF0ZSI6IjgyYTMwYTY3LWE0MTItNDk1Ni04ZmRlLWQ4MGVkZTVjNzUxNCIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImxpdnJvcyI6eyJyb2xlcyI6WyJhZG1pbmlzdHJhZG9yIl19LCJlbXByZXN0aW1vcyI6eyJyb2xlcyI6WyJhZG1pbmlzdHJhZG9yIl19LCJjbGllbnRlcyI6eyJyb2xlcyI6WyJhZG1pbmlzdHJhZG9yIl19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJhZG1pbmlzdHJhZG9yIn0.PAdhtzm8fH6ss7pKL30g4NEvtxRsrno7dkNMrWzc_DO2c6tsgYnsVAhvx4FxE1pQqLf9lG8dpPbTmdIOg4IttMZ9S-Oop-8xICN7pOx72OMBWz4fkdOlB8GMUGHX0kVbcJXrlyOsfxqNRvcBUISj4jaKhNek3Rm9eEXj2P7GKmZA4E17KUunFwPzTMzkzYca4jVvzzRqXY7q0auHAoUsav_2ldfSsNr7-opDvFPpvQC7WJX9pPdKwAkZ7GtjldjKCe0T8m9CN8DdrdyI5xImcSMbGe1yErC1-yaTGzi3YvKZRMUswfyVks2gYs0oPJabgzve2w2Jw4k8YdzweZPJcQ",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "password_credentials",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "http://localhost:8000/auth/realms/biblioteca/protocol/openid-connect/token",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "Token",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "123",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "administrador",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "clientes",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
