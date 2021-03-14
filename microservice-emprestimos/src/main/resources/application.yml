@@ -32,6 +32,8 @@ kafka:
       adiciona-copia:
         topic: livros-adiciona-copia
         group-id: 1
+        dlq: livros-adiciona-copia-dlq
       remove-copia:
         topic: livros-remove-copia
         group-id: 1
+        dlq: livros-remove-copia-dlq

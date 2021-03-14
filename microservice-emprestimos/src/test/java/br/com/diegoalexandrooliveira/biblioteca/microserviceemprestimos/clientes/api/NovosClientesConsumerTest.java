@@ -13,10 +13,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
-class NovosClientesListenerTest {
+class NovosClientesConsumerTest {
 
     @Autowired
-    private NovosClientesListener novosClientesListener;
+    private NovosClientesConsumer novosClientesConsumer;
     @Autowired
     private ClienteRepository clienteRepository;
 
@@ -28,7 +28,7 @@ class NovosClientesListenerTest {
         when(genericRecord.get("usuario")).thenReturn("usuario_teste");
         when(genericRecord.get("nomeCompleto")).thenReturn("Usuário de Teste");
         when(genericRecord.get("habilitado")).thenReturn("true");
-        novosClientesListener.consumer(genericRecord);
+        novosClientesConsumer.consumer(genericRecord);
 
         Cliente cliente = clienteRepository.procuraPorUsuario("usuario_teste").orElseThrow();
 
@@ -51,7 +51,7 @@ class NovosClientesListenerTest {
         when(genericRecord.get("nomeCompleto")).thenReturn("Usuário Atualizado");
         when(genericRecord.get("habilitado")).thenReturn("false");
 
-        novosClientesListener.consumer(genericRecord);
+        novosClientesConsumer.consumer(genericRecord);
 
         Cliente clienteRecuperado = clienteRepository.findById(cliente.getId()).orElseThrow();
 

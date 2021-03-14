@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @KafkaListener(groupId = "${kafka.consumer.clientes.group-id}", topics = "${kafka.consumer.clientes.topic}")
 @Component
 @RequiredArgsConstructor
-class NovosClientesListener {
+class NovosClientesConsumer {
 
     private final ClienteRepository clienteRepository;
 

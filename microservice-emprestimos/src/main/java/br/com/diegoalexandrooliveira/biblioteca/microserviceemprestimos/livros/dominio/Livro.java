@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Document
@@ -28,8 +29,28 @@ public class Livro {
 
     private int anoLancamento;
 
+    private Copia copias;
+
     public static LivroBuilder builder() {
         return new LivroBuilder();
+    }
+
+    public void adicionaCopia() {
+        if (Objects.isNull(copias)) {
+            copias = new Copia(0, 0);
+        }
+        int quantidadeTotal = copias.getQuantidadeTotal();
+        int quantidadeDisponivel = copias.getQuantidadeDisponivel();
+        copias = new Copia(++quantidadeTotal, ++quantidadeDisponivel);
+    }
+
+    public void removeCopia() {
+        if (Objects.isNull(copias)) {
+            copias = new Copia(0, 0);
+        }
+        int quantidadeTotal = copias.getQuantidadeTotal();
+        int quantidadeDisponivel = copias.getQuantidadeDisponivel();
+        copias = new Copia(--quantidadeTotal, --quantidadeDisponivel);
     }
 
     public static final class LivroBuilder {
@@ -82,6 +103,7 @@ public class Livro {
             livro.nomeAutor = this.nomeAutor;
             livro.anoLancamento = this.anoLancamento;
             livro.id = ThreadLocalRandom.current().nextLong(1_000_000);
+            livro.copias = new Copia(0, 0);
             return livro;
         }
     }

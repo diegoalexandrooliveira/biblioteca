@@ -32,6 +32,8 @@ public class LivroController {
     private final HistoricoCopiasRepository historicoCopiasRepository;
     private final KeycloakInfoExtractor keycloakInfoExtractor;
     private final EnviarNovoLivro enviarNovoLivro;
+    private final EnviarNovaCopiaLivro enviarNovaCopiaLivro;
+    private final EnviarRemoveCopiaLivro enviarRemoveCopiaLivro;
 
 
     @PostMapping
@@ -62,6 +64,7 @@ public class LivroController {
         HistoricoCopias historicoCopias = new HistoricoCopias(livro, ADICIONA, keycloakInfoExtractor.getUsuario());
         livroRepository.save(livro);
         historicoCopiasRepository.save(historicoCopias);
+        enviarNovaCopiaLivro.enviar(livro);
         return ResponseEntity.ok(livro.getQuantidadeDeCopias());
     }
 
@@ -73,6 +76,7 @@ public class LivroController {
         HistoricoCopias historicoCopias = new HistoricoCopias(livro, REMOVE, keycloakInfoExtractor.getUsuario());
         livroRepository.save(livro);
         historicoCopiasRepository.save(historicoCopias);
+        enviarRemoveCopiaLivro.enviar(livro);
         return ResponseEntity.ok(livro.getQuantidadeDeCopias());
     }
 
