@@ -1,15 +1,19 @@
-name: Mirroring
+name: Mirror and run GitLab CI
 
-on: [push, delete]
+on: [push]
 
 jobs:
-  to_gitlab:
-    runs-on: ubuntu-18.04
-    steps:                                              # <-- must use actions/checkout@v1 before mirroring!
+  build:
+    runs-on: ubuntu-latest
+    steps:
     - uses: actions/checkout@v1
-    - uses: pixta-dev/repository-mirroring-action@v1
+    - name: Mirror + trigger CI
+      uses: SvanBoxel/gitlab-mirror-and-ci-action@master
       with:
-        target_repo_url:
-          git@gitlab.com:diegoalexandrooliveira_biblioteca/biblioteca.git
-        ssh_private_key:                                # <-- use 'secrets' to pass credential information.
-          ${{ secrets.GITLAB_PASSWORD }}
+        args: "https://gitlab.com/diegoalexandrooliveira_biblioteca/biblioteca"
+      env:
+        GITLAB_HOSTNAME: "gitlab.com"
+        GITLAB_USERNAME: "diegoalexandrooliveira"
+        GITLAB_PASSWORD: ${{ secrets.GITLAB_PASSWORD }}
+        GITLAB_PROJECT_ID: "25169416"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
