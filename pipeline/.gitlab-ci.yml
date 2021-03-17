@@ -1,0 +1,8 @@
+before_script:
+  - docker info
+
+build-job:
+  stage: build
+  script:
+    - ls -lha
+    - docker ps
