@@ -1,8 +1,13 @@
-before_script:
-  - docker info
+# before_script:
+#     - echo "$DOCKER_REGISTRY_PASS" | docker login $DOCKER_REGISTRY --username $DOCKER_REGISTRY_USER --password-stdin
 
 build-job:
   stage: build
   script:
-    - ls -lha
-    - docker ps
+    - docker build -t teste-clientes -f microservice-clientes/devops/Dockerfile-CI .
+    - docker run --name teste-clientes-build -v /var/run/docker.sock:/var/run/docker.sock teste-clientes
+    - docker cp teste-clientes-build:/app/sources/target/microservice-clientes-0.0.1-SNAPSHOT.jar microservice-clientes/app.jar
+    - cd microservice-clientes
+    - docker build -t diegoalexandrooliveira/biblioteca-clientes:latest -f devops/Dockerfile-CD .
+    - docker rm -f teste-clientes-build
+    - docker rmi teste-clientes

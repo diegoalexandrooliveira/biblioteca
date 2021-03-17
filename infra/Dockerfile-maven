@@ -1,0 +1,19 @@
+FROM docker:latest
+
+COPY . /root/.m2/
+
+WORKDIR /home/
+
+RUN mv /root/.m2/apache-maven-3.6.3-bin.tar.gz ./apache-maven-3.6.3-bin.tar.gz
+
+RUN gzip -d apache-maven-3.6.3-bin.tar.gz
+
+RUN tar -xf apache-maven-3.6.3-bin.tar
+
+RUN rm apache-maven-3.6.3-bin.tar
+
+RUN chmod +x /home/apache-maven-3.6.3/bin/mvn
+
+ENV PATH $PATH:/home/apache-maven-3.6.3/bin
+
+RUN apk add openjdk11

@@ -1,0 +1,16 @@
+FROM openjdk:11-jre-slim
+
+COPY ./app.jar /app/app.jar
+
+WORKDIR /app/
+
+EXPOSE 8080
+
+ENTRYPOINT exec java \
+            -Dspring.datasource.username=$DB_USERNAME \
+            -Dspring.datasource.password=$DB_PASSWORD \
+            -Dspring.datasource.url=$DB_URL \
+            -Dkafka.properties.schema.registry.url=$KAFKA_REGISTRY_URL \
+            -Dspring.kafka.bootstrap-servers=$KAFKA_URL \
+            -Dkeycloak.auth-server-url=$KEYCLOAK_URL \
+            -jar app.jar

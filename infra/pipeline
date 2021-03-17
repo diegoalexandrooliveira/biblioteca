@@ -1,0 +1,11 @@
+# Instalar o runner do GitLab
+
+docker run -d --name gitlab-runner --restart always \                                                          
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v gitlab-runner-config:/etc/gitlab-runner \
+    gitlab/gitlab-runner:latest
+
+
+# Registrar o Runner como docker, assim será possível controlar o docker da máquina local no pipeline
+
+docker exec -it gitlab-runner gitlab-runner register --docker-volumes /var/run/docker.sock:/var/run/docker.sock
