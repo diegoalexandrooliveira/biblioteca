@@ -10,7 +10,7 @@ spring:
       ddl-auto: none
   kafka:
     properties:
-      schema.registry.url: http://localhost:8040
+      schema.registry.url: ${KAFKA_REGISTRY_URL:http://localhost:8040}
     producer:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 server:
