@@ -1,6 +1,8 @@
-before_script:
-    - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
-build-clientes:
+default:
+  before_script:
+      - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD" $DOCKER_REGISTRY
+
+clientes:
   stage: build
   script:
     - |
@@ -13,7 +15,7 @@ build-clientes:
       docker rmi teste-clientes
       docker push diegoalexandrooliveira/biblioteca-clientes:latest
 
-build-livros:
+livros:
   stage: build
   script:
     - |
