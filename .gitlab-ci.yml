@@ -16,7 +16,7 @@ clientes:
       docker push diegoalexandrooliveira/biblioteca-clientes:latest
 
 livros:
-  stage: build
+  stage: test
   script:
     - |
       docker build -t teste-livros -f microservice-livros/devops/Dockerfile-CI .
