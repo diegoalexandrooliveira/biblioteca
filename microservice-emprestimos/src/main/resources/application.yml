@@ -6,6 +6,7 @@ spring:
       password: root
       authentication-database: admin
   kafka:
+    bootstrap-servers: ${KAFKA_URL:172.17.0.1:29092}
     properties:
       schema.registry.url: http://localhost:8040
     consumer:
