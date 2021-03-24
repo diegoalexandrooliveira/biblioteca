@@ -3,11 +3,11 @@ package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Document
 @Getter
@@ -15,7 +15,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Livro {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     private String titulo;
 
@@ -102,7 +102,7 @@ public class Livro {
             livro.numeroPaginas = this.numeroPaginas;
             livro.nomeAutor = this.nomeAutor;
             livro.anoLancamento = this.anoLancamento;
-            livro.id = ThreadLocalRandom.current().nextLong(1_000_000);
+            livro.id = new ObjectId();
             livro.copias = new Copia(0, 0);
             return livro;
         }

@@ -9,8 +9,9 @@ spring:
     hibernate:
       ddl-auto: none
   kafka:
+    bootstrap-servers: ${KAFKA_URL:localhost:29092}
     properties:
-      schema.registry.url: http://localhost:8040
+      schema.registry.url: ${KAFKA_REGISTRY_URL:http://localhost:8040}
     producer:
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
 server:

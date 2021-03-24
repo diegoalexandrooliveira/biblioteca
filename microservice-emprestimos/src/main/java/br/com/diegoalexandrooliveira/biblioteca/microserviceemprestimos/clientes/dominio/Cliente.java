@@ -3,10 +3,9 @@ package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.cliente
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 @Document
 @Getter
@@ -14,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Cliente {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     private String usuario;
 
@@ -29,7 +28,7 @@ public class Cliente {
         this.nomeCompleto = nomeCompleto;
         this.habilitado = habilitado;
         this.quantidadeEmprestimos = 0;
-        this.id = ThreadLocalRandom.current().nextLong(1_000_000);
+        this.id = new ObjectId();
     }
 
     public void alteraDadosPessoais(String nomeCompleto, boolean habilitado) {

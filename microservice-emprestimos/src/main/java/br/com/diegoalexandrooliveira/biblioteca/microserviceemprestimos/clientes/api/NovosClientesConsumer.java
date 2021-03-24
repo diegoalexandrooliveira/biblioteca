@@ -9,10 +9,11 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-@KafkaListener(groupId = "${kafka.consumer.clientes.group-id}", topics = "${kafka.consumer.clientes.topic}")
+
 @Component
 @RequiredArgsConstructor
-class NovosClientesConsumer {
+@KafkaListener(groupId = "${kafka.consumer.clientes.group-id}", topics = "${kafka.consumer.clientes.topic}")
+public class NovosClientesConsumer {
 
     private final ClienteRepository clienteRepository;
 

@@ -68,4 +68,4 @@ Aqui serão descritos os serviços e suas funcionalidades
 #### Empréstimos (microservice-emprestimos)
 
 - Um administrador pode consultar todos empréstimos, realizar devolução, criar um empréstimo para um cliente e aprovar os empréstimos solicitados
-- Um cliente pode buscar livros disponíveis, consultar seus empréstimos, solicitar empréstimo e disistir de um empréstimo ainda não efetivado
+- Um cliente pode buscar livros disponíveis, consultar seus empréstimos, solicitar empréstimo e desistir de um empréstimo ainda não efetivado
