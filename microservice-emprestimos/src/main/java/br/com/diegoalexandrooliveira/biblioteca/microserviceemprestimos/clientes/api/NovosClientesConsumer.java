@@ -1,12 +1,11 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.ClienteRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.ClienteRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.avro.generic.GenericRecord;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 
@@ -18,18 +17,17 @@ public class NovosClientesConsumer {
     private final ClienteRepository clienteRepository;
 
     @KafkaHandler
-    protected void consumer(@Payload GenericRecord genericRecord) {
+    public void consumer(ClienteRecord clienteRecord) {
         Cliente cliente = clienteRepository
-                .procuraPorUsuario(genericRecord.get("usuario").toString())
+                .procuraPorUsuario(clienteRecord.getUsuario().toString())
                 .map(clienteEnconrado -> {
-                    clienteEnconrado.alteraDadosPessoais(genericRecord.get("nomeCompleto").toString(), Boolean.parseBoolean(genericRecord.get("habilitado").toString()));
+                    clienteEnconrado.alteraDadosPessoais(clienteRecord.getNomeCompleto().toString(), clienteRecord.getHabilitado());
                     return clienteEnconrado;
                 })
-                .orElse(new Cliente(genericRecord.get("usuario").toString(),
-                        genericRecord.get("nomeCompleto").toString(),
-                        Boolean.parseBoolean(genericRecord.get("habilitado").toString())));
+                .orElse(new Cliente(clienteRecord.getUsuario().toString(),
+                        clienteRecord.getNomeCompleto().toString(),
+                        clienteRecord.getHabilitado()));
 
         clienteRepository.save(cliente);
     }
-
 }

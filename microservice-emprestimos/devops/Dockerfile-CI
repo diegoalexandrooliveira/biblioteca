@@ -1,0 +1,9 @@
+FROM maven-repository:latest as maven
+
+COPY ./microservice-emprestimos/ /app/sources
+
+COPY ./avro /app/avro
+
+WORKDIR /app/sources
+
+ENTRYPOINT mvn package

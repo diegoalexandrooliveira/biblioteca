@@ -7,9 +7,11 @@ WORKDIR /app/
 EXPOSE 8080
 
 ENTRYPOINT exec java \
-            -Dspring.datasource.username=$DB_USERNAME \
-            -Dspring.datasource.password=$DB_PASSWORD \
-            -Dspring.datasource.url=$DB_URL \
+            -Dspring.data.mongodb.host=$MONGO_HOST \
+            -Dspring.data.mongodb.port=$MONGO_PORT \
+            -Dspring.data.mongodb.database=$MONGO_DATABASE \
+            -Dspring.data.mongodb.username=$MONGO_USERNAME \
+            -Dspring.data.mongodb.password=$MONGO_PASSWORD \
             -Dkeycloak.auth-server-url=$KEYCLOAK_URL \
             -Dkafka.properties.schema.registry.url=$KAFKA_REGISTRY_URL \
             -Dspring.kafka.bootstrap-servers=$KAFKA_URL \

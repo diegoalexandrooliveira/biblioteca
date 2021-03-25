@@ -27,3 +27,16 @@ livros:
       docker rm -f teste-livros-build
       docker rmi teste-livros
       docker push diegoalexandrooliveira/biblioteca-livros:latest
+
+emprestimos:
+  stage: build
+  script:
+    - |
+      docker build -t teste-emprestimos -f microservice-emprestimos/devops/Dockerfile-CI .
+      docker run --name teste-emprestimos-build -v /var/run/docker.sock:/var/run/docker.sock teste-emprestimos
+      docker cp teste-livros-build:/app/sources/target/microservice-emprestimos-0.0.1-SNAPSHOT.jar microservice-emprestimos/app.jar
+      cd microservice-emprestimos
+      docker build -t diegoalexandrooliveira/biblioteca-emprestimos:latest -f devops/Dockerfile-CD .
+      docker rm -f teste-emprestimos-build
+      docker rmi teste-emprestimos
+      docker push diegoalexandrooliveira/biblioteca-emprestimos:latest

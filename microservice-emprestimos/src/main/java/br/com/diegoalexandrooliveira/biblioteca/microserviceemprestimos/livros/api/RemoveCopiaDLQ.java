@@ -2,7 +2,6 @@ package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.
 
 import br.com.diegoalexandrooliveira.biblioteca.EventoCopiaLivroRecord;
 import lombok.RequiredArgsConstructor;
-import org.apache.avro.generic.GenericRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -16,12 +15,7 @@ class RemoveCopiaDLQ {
     private String topico;
 
 
-    void enviar(GenericRecord genericRecord) {
-        EventoCopiaLivroRecord removeCopiaRecord = EventoCopiaLivroRecord
-                .newBuilder()
-                .setIsbn(genericRecord.get("isbn").toString())
-                .setQuantidadeTotal(Integer.parseInt(genericRecord.get("quantidadeTotal").toString()))
-                .build();
-        kafkaTemplate.send(topico, removeCopiaRecord);
+    void enviar(EventoCopiaLivroRecord eventoCopiaLivroRecord) {
+        kafkaTemplate.send(topico, eventoCopiaLivroRecord);
     }
 }

@@ -1,5 +1,6 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.EventoCopiaLivroRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.Livro;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.LivroRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,14 @@ class RemoveCopiaConsumer {
     private final RemoveCopiaDLQ removeCopiaDLQ;
 
     @KafkaHandler
-    protected void consumer(@Payload GenericRecord genericRecord) {
+    protected void consumer(EventoCopiaLivroRecord eventoCopiaLivroRecord) {
         try {
-            Livro livro = livroRepository.findByIsbn(genericRecord.get("isbn").toString()).orElseThrow(IllegalStateException::new);
+            Livro livro = livroRepository.findByIsbn(eventoCopiaLivroRecord.getIsbn().toString()).orElseThrow(IllegalStateException::new);
             livro.removeCopia();
             livroRepository.save(livro);
         } catch (IllegalStateException e) {
-            log.error("Livro com o ISBN {} não foi encotrado, enviando evento para DLQ", genericRecord.get("isbn"));
-            removeCopiaDLQ.enviar(genericRecord);
+            log.error("Livro com o ISBN {} não foi encotrado, enviando evento para DLQ", eventoCopiaLivroRecord.getIsbn());
+            removeCopiaDLQ.enviar(eventoCopiaLivroRecord);
         }
     }
 }

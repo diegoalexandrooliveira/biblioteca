@@ -1,5 +1,6 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.ClienteRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.ClienteRepository;
 import org.apache.avro.generic.GenericRecord;
@@ -23,12 +24,19 @@ class NovosClientesConsumerTest {
     @DisplayName("Deve salvar cliente")
     @Test
     void teste1() {
-        GenericRecord genericRecord = mock(GenericRecord.class);
 
-        when(genericRecord.get("usuario")).thenReturn("usuario_teste");
-        when(genericRecord.get("nomeCompleto")).thenReturn("Usuário de Teste");
-        when(genericRecord.get("habilitado")).thenReturn("true");
-        novosClientesConsumer.consumer(genericRecord);
+        ClienteRecord clienteRecord = ClienteRecord.newBuilder()
+                .setUsuario("usuario_teste")
+                .setNomeCompleto("Usuário de Teste")
+                .setHabilitado(true)
+                .setCpf("123")
+                .setCidade("123")
+                .setEstado("123")
+                .setLogradouro("123")
+                .setNumero(1)
+                .build();
+
+        novosClientesConsumer.consumer(clienteRecord);
 
         Cliente cliente = clienteRepository.procuraPorUsuario("usuario_teste").orElseThrow();
 
@@ -45,13 +53,18 @@ class NovosClientesConsumerTest {
 
         clienteRepository.save(cliente);
 
-        GenericRecord genericRecord = mock(GenericRecord.class);
+        ClienteRecord clienteRecord = ClienteRecord.newBuilder()
+                .setUsuario("usuario_teste2")
+                .setNomeCompleto("Usuário Atualizado")
+                .setHabilitado(false)
+                .setCpf("123")
+                .setCidade("123")
+                .setEstado("123")
+                .setLogradouro("123")
+                .setNumero(1)
+                .build();
 
-        when(genericRecord.get("usuario")).thenReturn("usuario_teste2");
-        when(genericRecord.get("nomeCompleto")).thenReturn("Usuário Atualizado");
-        when(genericRecord.get("habilitado")).thenReturn("false");
-
-        novosClientesConsumer.consumer(genericRecord);
+        novosClientesConsumer.consumer(clienteRecord);
 
         Cliente clienteRecuperado = clienteRepository.findById(cliente.getId()).orElseThrow();
 

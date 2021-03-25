@@ -1,5 +1,6 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.LivroRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.Livro;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.LivroRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +18,14 @@ class NovosLivrosConsumer {
     private final LivroRepository livroRepository;
 
     @KafkaHandler
-    protected void consumer(@Payload GenericRecord genericRecord) {
+    protected void consumer(LivroRecord livroRecord) {
         Livro livro = Livro.builder()
-                .titulo(genericRecord.get("titulo").toString())
-                .isbn(genericRecord.get("isbn").toString())
-                .editora(genericRecord.get("editora").toString())
-                .nomeAutor(genericRecord.get("nomeAutor").toString())
-                .numeroPaginas(Integer.parseInt(genericRecord.get("numeroPaginas").toString()))
-                .anoLancamento(Integer.parseInt(genericRecord.get("anoLancamento").toString()))
+                .titulo(livroRecord.getTitulo().toString())
+                .isbn(livroRecord.getIsbn().toString())
+                .editora(livroRecord.getEditora().toString())
+                .nomeAutor(livroRecord.getNomeAutor().toString())
+                .numeroPaginas(livroRecord.getNumeroPaginas())
+                .anoLancamento(livroRecord.getAnoLancamento())
                 .build();
         livroRepository.save(livro);
     }
