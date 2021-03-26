@@ -14,8 +14,11 @@ spring:
       specific.avro.reader: true
     consumer:
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      enable-auto-commit: false
+    listener:
+      ack-mode: MANUAL
 server:
-  port: 8003
+  port: 8006
   servlet:
     context-path: '/api/service/'
 keycloak:

@@ -1,0 +1,40 @@
+1k
+Sem concorrência:
+
+Início (ms): 1616784513131
+Fim (ms): 1616784663600
+
+Tempo total(ms): 150469
+Minutos: 2,50781667
+____________________________________________________________
+1k
+Com concorrência (50 threads):
+
+Início (ms): 1616784968829
+Fim (ms): 1616784971972
+
+Tempo total(ms): 3143
+Minutos: 0,05238333
+
+____________________________________________________________
+10k
+Com concorrência (50 threads), 2 consumers:
+
+Início (ms): 1616785290837
+Fim (ms): 1616785306791
+
+Tempo total(ms): 15954
+Minutos: 0,2659
+
+____________________________________________________________
+10k
+Com concorrência (100 threads), 2 consumers:
+* O Feign por default suporta 200 conexões em paralelo.
+
+Início (ms): 1616786021348
+Fim (ms): 1616786029722
+
+Tempo total(ms): 8374
+Minutos: 0,1395667
+
+

@@ -36,6 +36,17 @@ public class ClienteController {
         return ResponseEntity.ok(ClienteResponse.of(cliente));
     }
 
+    @PostMapping(path = "/multiplos")
+    @RolesAllowed(ADMIN)
+    public ResponseEntity<ClienteResponse> salvar2(@RequestBody @Valid NovoClienteRequest novoClienteRequest) {
+        Cliente cliente = novoClienteRequest.converter();
+        for (int i = 0; i < 10_000; i++) {
+            enviarCliente.enviar(cliente);
+        }
+        System.out.printf("Dados enviados para a fila. %s", System.currentTimeMillis());
+        return ResponseEntity.ok(ClienteResponse.of(cliente));
+    }
+
     @GetMapping
     @RolesAllowed(ADMIN)
     public ResponseEntity<List<ClienteResponse>> recuperarTodos() {
