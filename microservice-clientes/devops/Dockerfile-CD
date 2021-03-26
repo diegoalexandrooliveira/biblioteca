@@ -11,6 +11,5 @@ ENTRYPOINT exec java \
             -Dspring.datasource.password=$DB_PASSWORD \
             -Dspring.datasource.url=$DB_URL \
             -Dkeycloak.auth-server-url=$KEYCLOAK_URL \
-            -Dkafka.properties.schema.registry.url=$KAFKA_REGISTRY_URL \
             -Dspring.kafka.bootstrap-servers=$KAFKA_URL \
             -jar app.jar

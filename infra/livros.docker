@@ -1,0 +1,8 @@
+docker run -d --name livros -p 7001:8002 \
+-e DB_USERNAME=postgres \
+-e DB_PASSWORD=postgres \
+-e DB_URL=jdbc:postgresql://172.17.0.1:5432/biblioteca-livros \
+-e KEYCLOAK_URL=http://172.17.0.1:8000/auth \
+-e KAFKA_REGISTRY_URL=http://172.17.0.1:8040 \
+-e KAFKA_URL=172.17.0.1:29092 \
+diegoalexandrooliveira/biblioteca-livros

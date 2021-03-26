@@ -10,7 +10,7 @@ spring:
   kafka:
     bootstrap-servers: ${KAFKA_URL:172.17.0.1:29092}
     properties:
-      schema.registry.url: http://localhost:8040
+      schema.registry.url: ${KAFKA_REGISTRY_URL:http://localhost:8040}
       specific.avro.reader: true
     consumer:
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer

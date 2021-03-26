@@ -1,0 +1,11 @@
+docker run -d --name emprestimos -p 7002:8003 \
+-e MONGO_HOST=172.17.0.1 \
+-e MONGO_PORT=27017 \
+-e MONGO_DATABASE=emprestimos \
+-e MONGO_USERNAME=root \
+-e MONGO_PASSWORD=root \
+-e MONGO_AUTH_DB=admin \
+-e KEYCLOAK_URL=http://172.17.0.1:8000/auth \
+-e KAFKA_REGISTRY_URL=http://172.17.0.1:8040 \
+-e KAFKA_URL=172.17.0.1:29092 \
+diegoalexandrooliveira/biblioteca-emprestimos
