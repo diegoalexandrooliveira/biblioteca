@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM ghcr.io/graalvm/graalvm-ce:latest:java11-21.0.0.2
 
 COPY ./app.jar /app/app.jar
 
