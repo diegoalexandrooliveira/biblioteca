@@ -6,12 +6,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 @Document
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -19,7 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Emprestimo {
 
     @Id
-    private Long id;
+    private ObjectId id;
 
     private Cliente pessoa;
 
@@ -29,14 +31,34 @@ public class Emprestimo {
 
     private Aprovador aprovador;
 
-    private ZonedDateTime dataEmprestimo;
+    private String dataEmprestimo;
 
-    private ZonedDateTime dataAcordadaDevolucao;
+    private String dataAcordadaDevolucao;
 
-    private ZonedDateTime dataDevolucao;
+    private String dataDevolucao;
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    public String getNomePessoa() {
+        return pessoa.getNomeCompleto();
+    }
+
+    public ZonedDateTime getDataAcordadaDevolucao() {
+        return ZonedDateTime.parse(dataAcordadaDevolucao);
+    }
+
+    public ZonedDateTime getDataEmprestimo() {
+        return ZonedDateTime.parse(dataEmprestimo);
+    }
+
+    public ZonedDateTime getDataDevolucao() {
+        return ZonedDateTime.parse(dataDevolucao);
+    }
+
+    public String getId() {
+        return id.toHexString();
     }
 
     public static final class Builder {
@@ -44,13 +66,15 @@ public class Emprestimo {
         private Set<Livro> livros;
         private Aprovador aprovador;
         private ZonedDateTime dataAcordadaDevolucao;
-        private ZonedDateTime dataDevolucao;
 
         private Builder() {
         }
 
         public Builder pessoa(@NonNull Cliente pessoa) {
             this.pessoa = pessoa;
+            if (!pessoa.isHabilitado()) {
+                throw new IllegalStateException(String.format("Pessoa %s não pode realizar emprestimo porque esta desabilitada.", pessoa.getNomeCompleto()));
+            }
             return this;
         }
 
@@ -72,21 +96,15 @@ public class Emprestimo {
             return this;
         }
 
-        public Builder dataDevolucao(@NonNull ZonedDateTime dataDevolucao) {
-            this.dataDevolucao = dataDevolucao;
-            return this;
-        }
-
         public Emprestimo build() {
             Emprestimo emprestimo = new Emprestimo();
-            emprestimo.dataAcordadaDevolucao = this.dataAcordadaDevolucao;
+            emprestimo.dataAcordadaDevolucao = this.dataAcordadaDevolucao.format(DateTimeFormatter.ISO_DATE_TIME);
             emprestimo.pessoa = this.pessoa;
-            emprestimo.dataDevolucao = this.dataDevolucao;
             emprestimo.livros = this.livros;
             emprestimo.aprovador = this.aprovador;
             emprestimo.situacao = Situacao.ABERTO;
-            emprestimo.dataEmprestimo = ZonedDateTime.now();
-            emprestimo.id = ThreadLocalRandom.current().nextLong(1, 1_000_000_001);
+            emprestimo.dataEmprestimo = ZonedDateTime.now().withZoneSameInstant(ZoneId.of("GMT")).format(DateTimeFormatter.ISO_DATE_TIME);
+            emprestimo.id = new ObjectId();
             return emprestimo;
         }
     }

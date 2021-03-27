@@ -3,15 +3,13 @@ package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.cliente
 import br.com.diegoalexandrooliveira.biblioteca.ClienteRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio.ClienteRepository;
-import org.apache.avro.generic.GenericRecord;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest("spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration")
 class NovosClientesConsumerTest {
@@ -66,13 +64,11 @@ class NovosClientesConsumerTest {
 
         novosClientesConsumer.consumer(clienteRecord);
 
-        Cliente clienteRecuperado = clienteRepository.findById(cliente.getId()).orElseThrow();
+        Cliente clienteRecuperado = clienteRepository.findById(new ObjectId(cliente.getId())).orElseThrow();
 
         assertEquals("usuario_teste2", clienteRecuperado.getUsuario());
         assertEquals("Usuário Atualizado", clienteRecuperado.getNomeCompleto());
         assertFalse(clienteRecuperado.isHabilitado());
         assertEquals(0, clienteRecuperado.getQuantidadeEmprestimos());
     }
-
-
 }

@@ -34,9 +34,9 @@ public class EmprestimoController {
 
     @PostMapping
     @RolesAllowed(ADMIN)
-    public ResponseEntity<Void> realizarEmprestimo(@RequestBody @Valid NovoEmprestimoRequest novoEmprestimoRequest) {
+    public ResponseEntity<NovoEmprestimoResponse> realizarEmprestimo(@RequestBody @Valid NovoEmprestimoRequest novoEmprestimoRequest) {
         String usuarioAprovador = keycloakInfoExtractor.getUsuario();
-        novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, usuarioAprovador);
-        return ResponseEntity.noContent().build();
+        Emprestimo emprestimo = novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, usuarioAprovador);
+        return ResponseEntity.ok(NovoEmprestimoResponse.from(emprestimo));
     }
 }

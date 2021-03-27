@@ -23,6 +23,10 @@ public class Cliente {
 
     private int quantidadeEmprestimos;
 
+    public String getId() {
+        return id.toHexString();
+    }
+
     public Cliente(String usuario, String nomeCompleto, boolean habilitado) {
         this.usuario = usuario;
         this.nomeCompleto = nomeCompleto;

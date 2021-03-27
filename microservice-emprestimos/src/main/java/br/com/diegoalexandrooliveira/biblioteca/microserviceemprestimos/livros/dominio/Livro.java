@@ -31,6 +31,10 @@ public class Livro {
 
     private Copia copias;
 
+    public String getId() {
+        return id.toHexString();
+    }
+
     public static LivroBuilder builder() {
         return new LivroBuilder();
     }
@@ -51,6 +55,25 @@ public class Livro {
         int quantidadeTotal = copias.getQuantidadeTotal();
         int quantidadeDisponivel = copias.getQuantidadeDisponivel();
         copias = new Copia(--quantidadeTotal, --quantidadeDisponivel);
+    }
+
+    public void realizaEmprestimo() {
+        if (Objects.isNull(copias)) {
+            copias = new Copia(0, 0);
+        }
+        int quantidadeDisponivel = copias.getQuantidadeDisponivel();
+        if (quantidadeDisponivel == 0) {
+            throw new IllegalStateException(String.format("Não há copias disponíveis para o livro %s", this.titulo));
+        }
+        copias = new Copia(copias.getQuantidadeTotal(), --quantidadeDisponivel);
+    }
+
+    public int getQuantidadeDisponivel() {
+        return copias.getQuantidadeDisponivel();
+    }
+
+    public int getQuantidadeTotal() {
+        return copias.getQuantidadeTotal();
     }
 
     public static final class LivroBuilder {
