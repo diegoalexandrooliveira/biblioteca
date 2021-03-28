@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.Set;
 
 @Document
@@ -53,8 +54,10 @@ public class Emprestimo {
         return ZonedDateTime.parse(dataEmprestimo);
     }
 
-    public ZonedDateTime getDataDevolucao() {
-        return ZonedDateTime.parse(dataDevolucao);
+    public Optional<ZonedDateTime> getDataDevolucao() {
+        return dataDevolucao == null || dataDevolucao.isEmpty() ?
+                Optional.empty() :
+                Optional.of(ZonedDateTime.parse(dataDevolucao));
     }
 
     public String getId() {

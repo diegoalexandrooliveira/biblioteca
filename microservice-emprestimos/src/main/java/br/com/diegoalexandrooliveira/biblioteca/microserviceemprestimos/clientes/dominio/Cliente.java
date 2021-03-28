@@ -1,6 +1,7 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.clientes.dominio;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = "usuario")
 public class Cliente {
 
     @Id

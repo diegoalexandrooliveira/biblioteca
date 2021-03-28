@@ -4,10 +4,8 @@ import br.com.diegoalexandrooliveira.biblioteca.LivroRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.Livro;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.LivroRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.avro.generic.GenericRecord;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @KafkaListener(groupId = "${kafka.consumer.livros.novos.group-id}", topics = "${kafka.consumer.livros.novos.topic}")

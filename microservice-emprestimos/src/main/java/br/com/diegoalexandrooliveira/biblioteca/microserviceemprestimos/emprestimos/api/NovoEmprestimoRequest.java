@@ -2,6 +2,7 @@ package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.emprest
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 public class NovoEmprestimoRequest {
 
     @NotNull

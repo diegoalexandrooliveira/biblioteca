@@ -1,6 +1,7 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
@@ -12,6 +13,7 @@ import java.util.Objects;
 @Document
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(of = "isbn")
 public class Livro {
 
     @Id
@@ -52,6 +54,9 @@ public class Livro {
         if (Objects.isNull(copias)) {
             copias = new Copia(0, 0);
         }
+        if(copias.getQuantidadeTotal() == 0){
+            throw new IllegalStateException("Não é possível remover uma cópia, quantidade total de livros é 0.");
+        }
         int quantidadeTotal = copias.getQuantidadeTotal();
         int quantidadeDisponivel = copias.getQuantidadeDisponivel();
         copias = new Copia(--quantidadeTotal, --quantidadeDisponivel);
@@ -63,7 +68,7 @@ public class Livro {
         }
         int quantidadeDisponivel = copias.getQuantidadeDisponivel();
         if (quantidadeDisponivel == 0) {
-            throw new IllegalStateException(String.format("Não há copias disponíveis para o livro %s", this.titulo));
+            throw new IllegalStateException(String.format("Não há cópias disponíveis para o livro %s", this.titulo));
         }
         copias = new Copia(copias.getQuantidadeTotal(), --quantidadeDisponivel);
     }
