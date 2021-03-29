@@ -2,10 +2,7 @@ package br.com.diegoalexandrooliveira.biblioteca.microservicelivros.api;
 
 
 import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.config.security.KeycloakInfoExtractor;
-import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.dominio.HistoricoCopias;
-import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.dominio.HistoricoCopiasRepository;
-import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.dominio.Livro;
-import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.dominio.LivroRepository;
+import br.com.diegoalexandrooliveira.biblioteca.microservicelivros.dominio.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +30,7 @@ public class LivroController {
     private final KeycloakInfoExtractor keycloakInfoExtractor;
     private final EnviarNovoLivro enviarNovoLivro;
     private final EnviarNovaCopiaLivro enviarNovaCopiaLivro;
-    private final EnviarRemoveCopiaLivro enviarRemoveCopiaLivro;
+    private final RemoveCopiaLivroService removeCopiaLivroService;
 
 
     @PostMapping
@@ -72,11 +69,9 @@ public class LivroController {
     @RolesAllowed(ADMIN)
     public ResponseEntity<Integer> removeCopia(@PathVariable("id") Long id) {
         Livro livro = livroRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado"));
-        livro.removeCopia();
+        removeCopiaLivroService.removeCopia(livro);
         HistoricoCopias historicoCopias = new HistoricoCopias(livro, REMOVE, keycloakInfoExtractor.getUsuario());
-        livroRepository.save(livro);
         historicoCopiasRepository.save(historicoCopias);
-        enviarRemoveCopiaLivro.enviar(livro);
         return ResponseEntity.ok(livro.getQuantidadeDeCopias());
     }
 

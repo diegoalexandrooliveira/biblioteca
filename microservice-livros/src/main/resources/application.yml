@@ -29,3 +29,10 @@ kafka:
     novos: livros-novos
     adiciona-copia: livros-adiciona-copia
     remove-copia: livros-remove-copia
+emprestimo:
+  service-url: http://localhost:8003/api/service/emprestimos/admin
+  oauth2:
+    username: administrador
+    password: 123
+    access-token-uri: http://localhost:8000/auth/realms/biblioteca/protocol/openid-connect/token
+    client-id: emprestimos

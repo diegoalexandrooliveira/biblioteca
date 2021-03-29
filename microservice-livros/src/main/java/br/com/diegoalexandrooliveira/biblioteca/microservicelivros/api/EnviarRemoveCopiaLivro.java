@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class EnviarRemoveCopiaLivro {
+public class EnviarRemoveCopiaLivro {
 
     private final KafkaTemplate<String, EventoCopiaLivroRecord> kafkaTemplate;
     @Value("${kafka.livros-topics.remove-copia}")
     private String topico;
 
 
-    void enviar(Livro livro) {
+    public void enviar(Livro livro) {
         EventoCopiaLivroRecord novaCopiaLivroRecord = EventoCopiaLivroRecord
                 .newBuilder()
                 .setIsbn(livro.getIsbn())

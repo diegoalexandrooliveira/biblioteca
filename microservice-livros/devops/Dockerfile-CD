@@ -12,4 +12,9 @@ ENTRYPOINT exec java \
             -Dspring.datasource.url=$DB_URL \
             -Dspring.kafka.bootstrap-servers=$KAFKA_URL \
             -Dkeycloak.auth-server-url=$KEYCLOAK_URL \
+            -Demprestimo.service-url=$EMPRESTIMO_URL \
+            -Demprestimo.oauth2.username=$EMPRESTIMO_USERNAME \
+            -Demprestimo.oauth2.password=$EMPRESTIMO_PASSWORD \
+            -Demprestimo.oauth2.access-token-uri=$EMPRESTIMO_IDENTITY_PROVIDER_URI \
+            -Demprestimo.oauth2.client-id=$EMPRESTIMO_CLIENT_ID \
             -jar app.jar
