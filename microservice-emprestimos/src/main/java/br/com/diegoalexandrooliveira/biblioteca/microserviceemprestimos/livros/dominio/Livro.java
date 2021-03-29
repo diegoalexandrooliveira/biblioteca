@@ -54,7 +54,7 @@ public class Livro {
         if (Objects.isNull(copias)) {
             copias = new Copia(0, 0);
         }
-        if(copias.getQuantidadeTotal() == 0){
+        if (copias.getQuantidadeTotal() == 0) {
             throw new IllegalStateException("Não é possível remover uma cópia, quantidade total de livros é 0.");
         }
         int quantidadeTotal = copias.getQuantidadeTotal();
@@ -79,6 +79,11 @@ public class Livro {
 
     public int getQuantidadeTotal() {
         return copias.getQuantidadeTotal();
+    }
+
+    public void devolverCopia() {
+        int quantidadeDisponivel = copias.getQuantidadeDisponivel();
+        copias = new Copia(copias.getQuantidadeTotal(), ++quantidadeDisponivel);
     }
 
     public static final class LivroBuilder {

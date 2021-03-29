@@ -18,6 +18,8 @@ server:
   port: 8003
   servlet:
     context-path: '/api/service/'
+  error:
+    include-message: always
 keycloak:
   realm: 'biblioteca'
   resource: 'emprestimos'

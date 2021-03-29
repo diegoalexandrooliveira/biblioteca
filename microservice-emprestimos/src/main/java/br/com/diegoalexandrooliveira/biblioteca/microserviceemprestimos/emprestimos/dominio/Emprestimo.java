@@ -64,6 +64,14 @@ public class Emprestimo {
         return id.toHexString();
     }
 
+    public void encerrar(@NonNull ZonedDateTime dataDevolucao) {
+        if (this.situacao == Situacao.ENCERRADO) {
+            throw new IllegalStateException(String.format("Emprestimo %s já está encerrado.", getId()));
+        }
+        this.situacao = Situacao.ENCERRADO;
+        this.dataDevolucao = dataDevolucao.format(DateTimeFormatter.ISO_DATE_TIME);
+    }
+
     public static final class Builder {
         private Cliente pessoa;
         private Set<Livro> livros;

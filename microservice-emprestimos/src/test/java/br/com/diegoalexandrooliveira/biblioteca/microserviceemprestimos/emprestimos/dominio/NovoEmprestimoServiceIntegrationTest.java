@@ -6,6 +6,7 @@ import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.empresti
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.Livro;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceemprestimos.livros.dominio.LivroRepository;
 import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,13 @@ class NovoEmprestimoServiceIntegrationTest {
 
     @Autowired
     private NovoEmprestimoService novoEmprestimoService;
+
+    @AfterEach
+    void cleanup(){
+        clienteRepository.deleteAll();
+        livroRepository.deleteAll();
+        emprestimoRepository.deleteAll();
+    }
 
     @DisplayName("Deve realizar um emprestimo")
     @Test
@@ -68,6 +76,75 @@ class NovoEmprestimoServiceIntegrationTest {
         assertEquals(cliente, emprestimo.getPessoa());
         assertEquals(1, emprestimo.getLivros().size());
         assertTrue(emprestimo.getLivros().contains(livroAposEmprestimo));
+    }
+
+    @DisplayName("Não deve realizar um emprestimo porque não existe o aprovador informado")
+    @Test
+    void teste2() {
+        ZonedDateTime dataParaDevolucao = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
+        NovoEmprestimoRequest novoEmprestimoRequest = new NovoEmprestimoRequest("cliente", Set.of("ISBN"), dataParaDevolucao);
+
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, "aprovador"));
+
+        assertEquals("Usuário aprovador não encontrado", illegalArgumentException.getMessage());
+
+    }
+
+    @DisplayName("Não deve realizar um emprestimo porque não existe o cliente informado")
+    @Test
+    void teste3() {
+        Cliente aprovador = new Cliente("aprovador", "Aprovador", true);
+        clienteRepository.save(aprovador);
+
+        ZonedDateTime dataParaDevolucao = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
+        NovoEmprestimoRequest novoEmprestimoRequest = new NovoEmprestimoRequest("cliente", Set.of("ISBN"), dataParaDevolucao);
+
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, "aprovador"));
+
+        assertEquals("Cliente cliente não encontrado.", illegalArgumentException.getMessage());
+
+    }
+
+    @DisplayName("Não deve realizar um emprestimo porque não existe o livro informado")
+    @Test
+    void teste4() {
+        Cliente aprovador = new Cliente("aprovador", "Aprovador", true);
+        Cliente cliente = new Cliente("cliente", "Cliente", true);
+        clienteRepository.save(aprovador);
+        clienteRepository.save(cliente);
+
+        ZonedDateTime dataParaDevolucao = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
+        NovoEmprestimoRequest novoEmprestimoRequest = new NovoEmprestimoRequest("cliente", Set.of("LIVRO"), dataParaDevolucao);
+
+        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class, () -> novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, "aprovador"));
+
+        assertEquals("ISBN LIVRO não encontrado.", illegalArgumentException.getMessage());
+    }
+
+    @DisplayName("Não deve realizar um emprestimo porque não há cópias do livro informado")
+    @Test
+    void teste5() {
+        Livro livro = Livro.builder()
+                .titulo("Titulo")
+                .numeroPaginas(1)
+                .nomeAutor("Autor")
+                .isbn("ISBN")
+                .editora("Editora")
+                .anoLancamento(1)
+                .build();
+        livroRepository.save(livro);
+
+        Cliente aprovador = new Cliente("aprovador", "Aprovador", true);
+        Cliente cliente = new Cliente("cliente", "Cliente", true);
+        clienteRepository.save(aprovador);
+        clienteRepository.save(cliente);
+
+        ZonedDateTime dataParaDevolucao = ZonedDateTime.now().plus(1, ChronoUnit.DAYS);
+        NovoEmprestimoRequest novoEmprestimoRequest = new NovoEmprestimoRequest("cliente", Set.of("ISBN"), dataParaDevolucao);
+
+        IllegalStateException illegalStateException = assertThrows(IllegalStateException.class, () -> novoEmprestimoService.efetivarEmprestimo(novoEmprestimoRequest, "aprovador"));
+
+        assertEquals("Não há cópias disponíveis para o livro Titulo", illegalStateException.getMessage());
     }
 
 }
