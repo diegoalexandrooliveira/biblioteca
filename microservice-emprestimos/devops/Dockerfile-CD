@@ -14,4 +14,5 @@ ENTRYPOINT exec java \
             -Dspring.data.mongodb.password=$MONGO_PASSWORD \
             -Dkeycloak.auth-server-url=$KEYCLOAK_URL \
             -Dspring.kafka.bootstrap-servers=$KAFKA_URL \
+            -Dserver.port=8080 \
             -jar app.jar

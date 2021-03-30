@@ -17,4 +17,5 @@ ENTRYPOINT exec java \
             -Demprestimo.oauth2.password=$EMPRESTIMO_PASSWORD \
             -Demprestimo.oauth2.access-token-uri=$EMPRESTIMO_IDENTITY_PROVIDER_URI \
             -Demprestimo.oauth2.client-id=$EMPRESTIMO_CLIENT_ID \
+            -Dserver.port=8080 \
             -jar app.jar
