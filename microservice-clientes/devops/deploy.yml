@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clientes
+  labels:
+    app: clientes
+spec:
+  selector:
+    matchLabels:
+      app: clientes
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: clientes
+    spec:
+      containers:
+        - name: clientes
+          image: 'diegoalexandrooliveira/biblioteca-clientes:latest'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: KAFKA_REGISTRY_URL
+              value: '1'
+            - name: KAFKA_URL
+              value: '1'
+            - name: KEYCLOAK_URL
+              value: '1'
+            - name: DB_URL
+              value: '1'
+            - name: DB_PASSWORD
+              value: '1'
+            - name: DB_USERNAME
+              value: '1'
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: ''
+            httpGet:
+              host: localhost
+              path: /api/service/actuator/health
+              port: 8080
+              scheme: HTTP
+          readinessProbe:
+            httpGet:
+              host: localhost
+              path: /api/service/actuator/health
+              port: 8080
+              scheme: HTTP
