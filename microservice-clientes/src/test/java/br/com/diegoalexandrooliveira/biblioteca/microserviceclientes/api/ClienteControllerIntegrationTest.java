@@ -1,12 +1,19 @@
 package br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.api;
 
+import br.com.diegoalexandrooliveira.biblioteca.ClienteRecord;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.config.security.Papeis;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Cliente;
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -17,6 +24,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,8 +43,27 @@ class ClienteControllerIntegrationTest {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private Consumer<StringDeserializer, KafkaAvroDeserializer> consumer;
+
+    @Value("${kafka.producer.topic}")
+    private String topico;
+
+    private List<ConsumerRecord<?, ?>> lerRegistrosKafka() {
+        TopicPartition particao = new TopicPartition(topico, 0);
+        Long offSetAtual = consumer.beginningOffsets(List.of(particao)).get(particao);
+        Long ultimoOffset = consumer.endOffsets(List.of(particao)).get(particao);
+
+        List<ConsumerRecord<?, ?>> registros = new ArrayList<>();
+
+        for (int i = offSetAtual.intValue(); i < ultimoOffset; i++) {
+            registros.addAll(consumer.poll(Duration.of(100, ChronoUnit.MILLIS)).records(particao));
+        }
+        return registros;
+    }
+
     @Test
-    @DisplayName("Deve criar um cliente")
+    @DisplayName("Deve criar um cliente e publicar mensagem no kafka")
     void teste1() throws Exception {
 
         String json = "{" +
@@ -65,6 +95,21 @@ class ClienteControllerIntegrationTest {
         assertEquals("São Paulo", cliente.getEstado());
         assertEquals(2, cliente.getNumero());
         assertTrue(cliente.isHabilitado());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(1, registrosKafka.size());
+
+        ClienteRecord clienteRecord = new ObjectMapper().readValue(registrosKafka.get(0).value().toString(), ClienteRecord.class);
+
+        assertEquals("novo_usuario@gmail.com", clienteRecord.getUsuario());
+        assertEquals("Novo Usuario", clienteRecord.getNomeCompleto());
+        assertEquals("25009169010", clienteRecord.getCpf());
+        assertEquals("Rua Um", clienteRecord.getLogradouro());
+        assertEquals("São Paulo", clienteRecord.getCidade());
+        assertEquals("São Paulo", clienteRecord.getEstado());
+        assertEquals(2, clienteRecord.getNumero());
+        assertTrue(clienteRecord.getHabilitado());
     }
 
     @Test
@@ -86,6 +131,10 @@ class ClienteControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(0, registrosKafka.size());
     }
 
     @Test
@@ -107,6 +156,10 @@ class ClienteControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(0, registrosKafka.size());
     }
 
     @Test
@@ -134,6 +187,21 @@ class ClienteControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
                 .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(1, registrosKafka.size());
+
+        ClienteRecord clienteRecord = new ObjectMapper().readValue(registrosKafka.get(0).value().toString(), ClienteRecord.class);
+
+        assertEquals("novo_usuario@gmail.com", clienteRecord.getUsuario());
+        assertEquals("Novo Usuario", clienteRecord.getNomeCompleto());
+        assertEquals("25009169010", clienteRecord.getCpf());
+        assertEquals("Rua Um", clienteRecord.getLogradouro());
+        assertEquals("São Paulo", clienteRecord.getCidade());
+        assertEquals("São Paulo", clienteRecord.getEstado());
+        assertEquals(2, clienteRecord.getNumero());
+        assertTrue(clienteRecord.getHabilitado());
     }
 
 
@@ -182,6 +250,30 @@ class ClienteControllerIntegrationTest {
         assertEquals("São Paulo", jsonRetornoInativar.get("estado"));
         assertEquals(2, jsonRetornoInativar.get("numero"));
         assertFalse(Boolean.getBoolean(jsonRetornoInativar.get("habilitado").toString()));
+
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(2, registrosKafka.size());
+
+        long offPrimeiroRegistro = registrosKafka.get(0).offset();
+
+        for (ConsumerRecord<?, ?> registro : registrosKafka) {
+            ClienteRecord clienteRecord = new ObjectMapper().readValue(registro.value().toString(), ClienteRecord.class);
+
+            assertEquals("novo_usuario@gmail.com", clienteRecord.getUsuario());
+            assertEquals("Novo Usuario", clienteRecord.getNomeCompleto());
+            assertEquals("25009169010", clienteRecord.getCpf());
+            assertEquals("Rua Um", clienteRecord.getLogradouro());
+            assertEquals("São Paulo", clienteRecord.getCidade());
+            assertEquals("São Paulo", clienteRecord.getEstado());
+            assertEquals(2, clienteRecord.getNumero());
+            if (registro.offset() > offPrimeiroRegistro) {
+                assertFalse(clienteRecord.getHabilitado());
+            } else {
+                assertTrue(clienteRecord.getHabilitado());
+            }
+        }
     }
 
     @Test
@@ -215,5 +307,20 @@ class ClienteControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(1, registrosKafka.size());
+
+        ClienteRecord clienteRecord = new ObjectMapper().readValue(registrosKafka.get(0).value().toString(), ClienteRecord.class);
+
+        assertEquals("usuario_antigo@gmail.com", clienteRecord.getUsuario());
+        assertEquals("Usuario Antigo", clienteRecord.getNomeCompleto());
+        assertEquals("25009169010", clienteRecord.getCpf());
+        assertEquals("Rua Um", clienteRecord.getLogradouro());
+        assertEquals("São Paulo", clienteRecord.getCidade());
+        assertEquals("São Paulo", clienteRecord.getEstado());
+        assertEquals(2, clienteRecord.getNumero());
+        assertTrue(clienteRecord.getHabilitado());
     }
 }
