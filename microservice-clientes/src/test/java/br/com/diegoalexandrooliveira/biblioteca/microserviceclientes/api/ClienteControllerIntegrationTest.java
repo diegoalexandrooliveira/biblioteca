@@ -6,6 +6,10 @@ import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.Cli
 import br.com.diegoalexandrooliveira.biblioteca.microserviceclientes.dominio.ClienteRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.*;
+import net.jqwik.spring.JqwikSpringSupport;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.TopicPartition;
@@ -35,6 +39,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @Transactional
+@JqwikSpringSupport
 class ClienteControllerIntegrationTest {
 
     @Autowired
@@ -321,6 +326,59 @@ class ClienteControllerIntegrationTest {
         assertEquals("São Paulo", clienteRecord.getCidade());
         assertEquals("São Paulo", clienteRecord.getEstado());
         assertEquals(2, clienteRecord.getNumero());
+        assertTrue(clienteRecord.getHabilitado());
+    }
+
+    @Property(tries = 10)
+    void teste7(@ForAll @StringLength(min = 1, max = 255) @AlphaChars  String nomeUsuario,
+                @ForAll @StringLength(min = 1, max = 255) @AlphaChars  String nomeCompleto,
+                @ForAll @StringLength(min = 1, max = 255) @AlphaChars  String logradouro,
+                @ForAll @IntRange(min = 1, max = 1000) int numero,
+                @ForAll @StringLength(min = 1, max = 11) @AlphaChars  String cidade,
+                @ForAll @StringLength(min = 1, max = 11) @AlphaChars  String estado) throws Exception {
+
+        String json = new ObjectMapper().writeValueAsString(
+                Map.of("usuario", nomeUsuario,
+                "nomeCompleto", nomeCompleto,
+                "cpf", "25009169010",
+                "logradouro", logradouro,
+                "numero", numero,
+                "cidade", cidade,
+                "estado", estado));
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andReturn();
+
+        Map<?, ?> objeto = new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), Map.class);
+
+        Cliente cliente = clienteRepository.findById(Long.valueOf(objeto.get("id").toString())).orElseThrow();
+
+        assertEquals(nomeUsuario, cliente.getUsuario());
+        assertEquals(nomeCompleto, cliente.getNomeCompleto());
+        assertEquals("25009169010", cliente.getCpf());
+        assertEquals(logradouro, cliente.getLogradouro());
+        assertEquals(cidade, cliente.getCidade());
+        assertEquals(estado, cliente.getEstado());
+        assertEquals(numero, cliente.getNumero());
+        assertTrue(cliente.isHabilitado());
+
+        List<ConsumerRecord<?, ?>> registrosKafka = lerRegistrosKafka();
+
+        assertEquals(1, registrosKafka.size());
+
+        ClienteRecord clienteRecord = new ObjectMapper().readValue(registrosKafka.get(0).value().toString(), ClienteRecord.class);
+
+        assertEquals(nomeUsuario, clienteRecord.getUsuario());
+        assertEquals(nomeCompleto, clienteRecord.getNomeCompleto());
+        assertEquals("25009169010", clienteRecord.getCpf());
+        assertEquals(logradouro, clienteRecord.getLogradouro());
+        assertEquals(cidade, clienteRecord.getCidade());
+        assertEquals(estado, clienteRecord.getEstado());
+        assertEquals(numero, clienteRecord.getNumero());
         assertTrue(clienteRecord.getHabilitado());
     }
 }
